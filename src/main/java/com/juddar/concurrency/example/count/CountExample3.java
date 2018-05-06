@@ -1,6 +1,6 @@
 package com.juddar.concurrency.example.count;
 
-import com.juddar.concurrency.annoations.NotThreadSafe;
+import com.juddar.concurrency.annoations.ThreadSafe;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.CountDownLatch;
@@ -9,8 +9,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
 
 @Slf4j
-@NotThreadSafe
-public class CountExample1 {
+@ThreadSafe
+public class CountExample3 {
 
     public static int clientTotal = 5000;
 
@@ -42,7 +42,7 @@ public class CountExample1 {
 
     }
 
-    public static  void add() {
+    public static synchronized void add() {
 
         count++;
     }

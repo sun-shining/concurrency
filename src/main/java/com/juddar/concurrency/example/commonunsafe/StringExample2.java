@@ -1,22 +1,19 @@
-package com.juddar.concurrency.example.count;
+package com.juddar.concurrency.example.commonunsafe;
 
-import com.juddar.concurrency.annoations.NotThreadSafe;
-import lombok.extern.slf4j.Slf4j;
+import com.juddar.concurrency.annoations.ThreadSafe;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
-
-@Slf4j
-@NotThreadSafe
-public class CountExample1 {
+@ThreadSafe
+public class StringExample2 {
 
     public static int clientTotal = 5000;
 
     public static int threadTotal = 200;
 
-    public static int count = 0;
+    public static StringBuffer stringBuffer = new StringBuffer();
 
     public static void main(String[] args) throws InterruptedException {
         ExecutorService executorService = Executors.newCachedThreadPool();
@@ -26,10 +23,9 @@ public class CountExample1 {
             executorService.execute(() -> {
                 try {
                     semaphore.acquire();
-                    add();
+                    update1();
                     semaphore.release();
                 } catch (InterruptedException e) {
-//                    log.error("exception", e);
                     e.printStackTrace();
                 }
                 countDownLatch.countDown();
@@ -38,12 +34,12 @@ public class CountExample1 {
         }
         countDownLatch.await();
         executorService.shutdown();
-        System.err.println("count : " + count);
+        System.err.println("count : " + stringBuffer.length());
 
     }
 
-    public static  void add() {
+    public static  void update1() {
 
-        count++;
+        stringBuffer.append("1");
     }
 }

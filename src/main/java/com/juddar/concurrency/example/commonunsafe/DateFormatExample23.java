@@ -1,22 +1,26 @@
-package com.juddar.concurrency.example.count;
+package com.juddar.concurrency.example.commonunsafe;
 
-import com.juddar.concurrency.annoations.NotThreadSafe;
-import lombok.extern.slf4j.Slf4j;
+import com.juddar.concurrency.annoations.ThreadSafe;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
 
-@Slf4j
-@NotThreadSafe
-public class CountExample1 {
+/**
+ * Joda-Time 包，可以提供线程安全的时间操作
+ */
+@ThreadSafe
+public class DateFormatExample23 {
 
     public static int clientTotal = 5000;
 
     public static int threadTotal = 200;
 
-    public static int count = 0;
+    private static DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyyMMdd");
 
     public static void main(String[] args) throws InterruptedException {
         ExecutorService executorService = Executors.newCachedThreadPool();
@@ -26,10 +30,9 @@ public class CountExample1 {
             executorService.execute(() -> {
                 try {
                     semaphore.acquire();
-                    add();
+                    update4();
                     semaphore.release();
                 } catch (InterruptedException e) {
-//                    log.error("exception", e);
                     e.printStackTrace();
                 }
                 countDownLatch.countDown();
@@ -38,12 +41,11 @@ public class CountExample1 {
         }
         countDownLatch.await();
         executorService.shutdown();
-        System.err.println("count : " + count);
 
     }
 
-    public static  void add() {
+    private static  void update4() {
+        System.err.println(DateTime.parse("20180508", dateTimeFormatter).toDateTime());
 
-        count++;
     }
 }
