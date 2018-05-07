@@ -1,40 +1,35 @@
 package com.juddar.concurrency.example.aqs;
 
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Semaphore;
 
-/**
- * CountDownLatch 计数器只能使用一次
- * 一个或n个线程等待其他线程
- */
-public class CountDownLatchExample1 {
+public class SemaphoreExample2 {
 
-    private static int threadCount = 200;
+    private static int threadCount = 20;
 
     public static void main(String[] args) throws InterruptedException {
         ExecutorService executorService = Executors.newCachedThreadPool();
-        final CountDownLatch countDownLatch = new CountDownLatch(threadCount);
+        final Semaphore semaphore = new Semaphore(3);
         for (int i = 0; i < threadCount; i++) {
             final  int threadNum = i;
             executorService.execute(()->{
+
                 try {
+                    semaphore.acquire(3);//获取多个许可，那和
                     test(threadNum);
+                    semaphore.release(3);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                } finally {
-                    countDownLatch.countDown();
                 }
+
             });
 
         }
-        countDownLatch.await();
-        System.err.println("finished");
         executorService.shutdown();
     }
 
     private static void test(int threadNum) throws InterruptedException {
-        Thread.sleep(100);
         System.err.println("%s"+threadNum);
         Thread.sleep(100);
     }
