@@ -1,22 +1,18 @@
-package com.juddar.concurrency.example.count;
+package com.juddar.concurrency.example.concurrent;
 
-import com.juddar.concurrency.annoations.NotThreadSafe;
-import lombok.extern.slf4j.Slf4j;
+import com.juddar.concurrency.annoations.ThreadSafe;
 
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Semaphore;
+import java.util.concurrent.*;
 
-@Slf4j
-@NotThreadSafe
-public class CountExample1 {
+@ThreadSafe
+public class CopyOnWriteArrayListExample1 {
+
 
     public static int clientTotal = 5000;
 
     public static int threadTotal = 200;
 
-    public static int count = 0;
+    private static CopyOnWriteArrayList<Integer> count = new CopyOnWriteArrayList<>();
 
     public static void main(String[] args) throws InterruptedException {
         ExecutorService service = Executors.newCachedThreadPool();
@@ -26,10 +22,9 @@ public class CountExample1 {
             service.execute(() -> {
                 try {
                     semaphore.acquire();//获取令牌
-                    add();
+                    add2();
                     semaphore.release();//释放令牌
                 } catch (InterruptedException e) {
-//                    log.error("exception", e);
                     e.printStackTrace();
                 }
                 countDownLatch.countDown();
@@ -38,12 +33,12 @@ public class CountExample1 {
         }
         countDownLatch.await();
         service.shutdown();
-        System.err.println("count : " + count);
+        System.err.println("count : " + count.size());
 
     }
 
-    public static void add() {
+    public static void add2() {
 
-        count++;
+        count.add(1);
     }
 }
