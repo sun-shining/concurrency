@@ -1,4 +1,4 @@
-package com.juddar.concurrency.example.factory.abstratfactory;
+package com.juddar.concurrency.example.factory.methodfactory;
 
 /**
  * @Description 加法运算
